@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<script src="./event_emitter.js"></script>
+<script src="./roslib.js"></script>
+
+<script>
+  const params=[
+    'live/camera/ExposureTime',
+    'live/projector/Interval'
+  ];
+  const ros = new ROSLIB.Ros();
+
+  ros.on('error', function(error) {
+    console.log('error:'+error);
+  });
+  ros.on('connection', function() {
+    console.log('Connection made!');
+  });
+  ros.on('close', function() {
+    console.log('Connection closed.');
+  });
+
+  ros.connect('ws://localhost:9090');
+
+  let maxVelX=new ROSLIB.Param({
+    ros : ros,
+    name : 'max_vel_y'
+  });
+  maxVelX.set(1.8);
+  maxVelX.get(function(value) {
+    console.log('MAX VAL: ' + value);
+  });
+  let camEx = new ROSLIB.Param({
+    ros : ros,
+    name : 'live/camera/ExposureTime'
+  });
+  camEx.get(function(value) {
+    console.log('CamEx: ' + value);
+  });
+</script>
+</head>
+
+<body>
+  <h1>Parameter manager Example</h1>
+</body>
+</html>
